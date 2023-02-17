@@ -1,41 +1,45 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../ContactForm/ContactForm.css';
 
 
-export class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+export const ContactForm = ({onSubmit}) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('')
 
-  handleInputChange = event => {
+  const handleInputChange = event => {
     const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
+    switch (name) {
+      case 'name':
+        setName(value)
+        break;
+      case 'number':
+        setNumber(value)
+        break;
+      default:
+        console.log('Something wrong')
+        break;
+    }
   };
 
-  sendData = event => {
+  const sendData = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state)
-    this.reset();
+    onSubmit(name, number)
+    reset();
   };
 
-  reset = () => {
-    this.setState({
-      name: '',
-      number: '',
-    });
+  const reset = () => {
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
     return (
-      <form className="form" onSubmit={this.sendData}>
+      <form className="form" onSubmit={sendData}>
         <label className="label">
           Name
           <input
             className="input"
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
             value={name}
             type="text"
             name="name"
@@ -48,7 +52,7 @@ export class ContactForm extends Component {
           Number
           <input
             className="input"
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
             value={number}
             type="tel"
             name="number"
@@ -62,7 +66,6 @@ export class ContactForm extends Component {
         </button>
       </form>
     );
-  }
 }
 
 ContactForm.propTypes = {
